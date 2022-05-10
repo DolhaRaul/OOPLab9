@@ -32,7 +32,7 @@ int Service::get_nr_elem()
 {
     return this->repo.get_size();
 }
-int Service::add(int cod, char *nume, char *oras, Data inceput, Data sfarsit)
+int Service::add(int cod, string nume, string oras, Data inceput, Data sfarsit)
 {
     Booking b(cod, nume, oras, inceput, sfarsit);
     return this->repo.adaugare(b);
@@ -41,7 +41,7 @@ int Service::del(int cod)
 {
     return this->repo.stergere(cod);
 }
-int Service::modify(int cod_nou, char *nume_nou, char *oras_nou, Data inc_noua, Data sf_noua)
+int Service::modify(int cod_nou, string nume_nou, string oras_nou, Data inc_noua, Data sf_noua)
 {
     Booking b_new(cod_nou, nume_nou, oras_nou, inc_noua, sf_noua);
     return this->repo.modificare(b_new);
@@ -56,20 +56,20 @@ vector<Booking> Service::get_elems()
 {
     return this->repo.get_All();
 }
-vector<Booking> Service::search_after_oras(char *oras)
+vector<Booking> Service::search_after_oras(string oras)
 {
     vector<Booking> hotele_dorite;
     for(int i = 0; i < this->get_nr_elem(); i++)
-        if(strcmp(this->get_elems()[i].get_oras(), oras) == 0)
+        if(this->get_elems()[i].get_oras()==oras)
             hotele_dorite.push_back(this->get_elems()[i]);
     return hotele_dorite;
 }
-void Service::search_booking_oras_perioada(char *oras, Data &begin, Data &end)
+void Service::search_booking_oras_perioada(string oras, Data &begin, Data &end)
 {
     vector<Booking> hoteluri_oras;///cele care au orasul dorit
     for(int i = 0; i < this->get_nr_elem(); i++)
-      if(!strcmp(this->get_elems()[i].get_oras(), oras))///au acelasi oras
-          hoteluri_oras.push_back(this->get_elems()[i]);
+        if(this->get_elems()[i].get_oras()==oras)///au acelasi oras
+            hoteluri_oras.push_back(this->get_elems()[i]);
     vector<Booking> hoteluri_dorite;///cele care respecta cerinta
     for(int i = 0; i < hoteluri_oras.size(); i++)
         if(verify_period(begin, end, hoteluri_oras[i].get_data_inc(), hoteluri_oras[i].get_data_sf()))///AM PRINS IN PERIOADA DIPSONIBILA

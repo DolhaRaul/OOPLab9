@@ -20,16 +20,16 @@ public:
     Service(Repository &);
     ///Service(RepositoryInFile &);
     ///ultimele 6 int uri ne dau cele 2 dati
-    int add(int, char*, char*, Data, Data);
+    int add(int, string , string , Data, Data);
     ///Avem nevoie doar de un cod pentru a sterge un Booking
     int del(int);
-    int modify(int, char*, char*, Data, Data);
+    int modify(int, string , string , Data, Data);
     int get_nr_elem();
     vector<Booking> get_elems();
     ///param:Un nume de hotel dat ca parametru
     ///return:Toate booking urile ce au numele hotelului cel dat ca parametru
-    vector<Booking> search_after_oras(char*);
-    void search_booking_oras_perioada(char*, Data&, Data&);
+    vector<Booking> search_after_oras(string );
+    void search_booking_oras_perioada(string , Data&, Data&);
     Service& operator=(Service &);
     ~Service();
 };

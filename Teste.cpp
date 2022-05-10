@@ -11,7 +11,7 @@ void Teste::teste_entitate()
     cout << "Teste pentru entitate:" << endl;
     Booking b;
     assert(b.get_cod() == 0);
-    assert(strcmp(b.get_nume(), "nimic") == 0);///datele initiale sunt bune
+    assert(b.get_nume()=="nimic");///datele initiale sunt bune
 
     Data s1 = {1, 1, 1};
     Data s2 = {2, 2, 2};
@@ -21,7 +21,7 @@ void Teste::teste_entitate()
     assert(b1.get_data_inc().luna == 1);
     assert(b1.get_data_inc().an == 1);
     assert(b1.get_data_sf().zi == 2);
-    assert(strcmp(b1.get_oras(), "Bistrita") == 0);
+    assert(b1.get_oras()== "Bistrita");
     Data s1_nume = {3, 3, 3};
     b1.set_data_inc(s1_nume);///Schimbam nuumele
     assert(b1.get_data_inc().zi == 3);
@@ -37,9 +37,9 @@ void Teste::teste_entitate()
     b2.set_cod(3);
     assert(b2.get_cod() == 3);
     b2.set_oras("Vaslui");
-    assert(strcmp(b2.get_oras(), "Vaslui") == 0);
+    assert(b2.get_oras()== "Vaslui");
     b2.set_nume("monopoly");
-    assert(strcmp(b2.get_nume(), "monopoly") == 0);
+    assert(b2.get_nume()== "monopoly");
 
     assert(Booking::from_string(b2.to_string()) == b2);
     assert(Booking::from_string(b1.to_string()) == b1);
