@@ -1,0 +1,3 @@
+C:/Users/rauld/OneDrive/Desktop/Laburi_OOP/Lab9_Live/cmake-build-debug/CMakeFiles/Lab9_Live.dir
+C:/Users/rauld/OneDrive/Desktop/Laburi_OOP/Lab9_Live/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/rauld/OneDrive/Desktop/Laburi_OOP/Lab9_Live/cmake-build-debug/CMakeFiles/rebuild_cache.dir
