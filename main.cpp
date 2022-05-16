@@ -13,9 +13,9 @@ int main() {
     Teste::teste_repository_file();
     Teste::teste_operatori_data();
     Teste::teste_service_tema();
-    ///RepositoryInFile r("Booking.txt");
+    RepositoryInFile rf("Booking.txt");
     Repository r;
-    Service sv(r);
+    Service sv(rf);
     UI ui(sv);
     ui.run_menu();
 

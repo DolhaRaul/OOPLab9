@@ -3,25 +3,12 @@
 //
 
 #include "Service.h"
-//Service::Service()
-//{
-//
-//}
-//Service::Service(Repository &r)
-//{
-//    this->repo = r;///operatorul = nu primeste const Repository &r
-//}
-Service::Service() {}
-Service::Service(Repository &r)
-{
-    this->repo = r;
-}
-//Service::Service(RepositoryInFile &r)
-//{
-//    this->repo = r;
-//}
 bool Service::verify_period(Data inceput1, Data sfarsit1, Data inceput2, Data sfarsit2)
 {
+    if(inceput1 > sfarsit1)
+        return false;///Valorile ce vin ca parametru nu sunt bune
+    if(inceput2 > sfarsit2)///Intervalul in care vrem sa cautam INCLUZIUNEA NU E BUN(pentru ca hotelul NU mai e
+        return false;   ///disponibil
     if(inceput1 < inceput2)
         return false;
     if(sfarsit1 > sfarsit2)
@@ -64,7 +51,7 @@ vector<Booking> Service::search_after_oras(string oras)
             hotele_dorite.push_back(this->get_elems()[i]);
     return hotele_dorite;
 }
-void Service::search_booking_oras_perioada(string oras, Data &begin, Data &end)
+vector<Booking> Service::search_booking_oras_perioada(string oras, Data &begin, Data &end)
 {
     vector<Booking> hoteluri_oras;///cele care au orasul dorit
     for(int i = 0; i < this->get_nr_elem(); i++)
@@ -76,29 +63,22 @@ void Service::search_booking_oras_perioada(string oras, Data &begin, Data &end)
             hoteluri_dorite.push_back(hoteluri_oras[i]);
     if(!hoteluri_dorite.empty())///avem hoteluri dorite
     {
-        for(int i = 0; i < hoteluri_dorite.size(); i++)
-            cout << " Al " << i + 1 << " lea hotel dorit este: " << endl << hoteluri_dorite[i];
+        return hoteluri_dorite;
     }
     if(hoteluri_dorite.empty())///NU AVEM hoteluri dorite
     {
-        cout << "NU avem hoteluri dorite!" << endl;
-        cout << "Hotelurile sugerate, cu interval de +/- 3 zile diferenta sunt:" << endl;
         vector<Booking> hoteluri_sugerate;
         Data new_begin = begin.bigger_with_3_days();
         Data new_end = end.bigger_with_3_days();///Interval cu 3 zile mai mare
         for(int i = 0; i < hoteluri_oras.size(); i++)
             if(verify_period(new_begin, new_end,hoteluri_oras[i].get_data_inc(), hoteluri_oras[i].get_data_sf()))///Avem un hotel sugerat
-                hoteluri_sugerate.push_back(hoteluri_dorite[i]);
+                hoteluri_sugerate.push_back(hoteluri_oras[i]);
         new_begin = begin.lower_with_3_days();
         new_end = end.lower_with_3_days();///interval cu 3 zile mai mic
         for(int i = 0; i < hoteluri_oras.size(); i++)
             if(verify_period(new_begin, new_end,hoteluri_oras[i].get_data_inc(), hoteluri_oras[i].get_data_sf()))///Avem un hotel sugerat
-                hoteluri_sugerate.push_back(hoteluri_dorite[i]);
-        if(!hoteluri_sugerate.empty())///avem hoteluri sugerate
-            for(int i = 0; i < hoteluri_sugerate.size(); i++)
-                cout << "Al " << i + 1 << " lea hotel sugerat este:" << endl << hoteluri_sugerate[i];
-        if(hoteluri_sugerate.empty())///NU avem NICI hoteluri sugerate
-            cout << "NU avem NICI hoteluri sugerate!" << endl;
+                hoteluri_sugerate.push_back(hoteluri_oras[i]);
+        return hoteluri_sugerate;///Ca avem elemente, ca nu avem, le returnam
     }
 }
 Service::~Service() {}

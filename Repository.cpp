@@ -22,9 +22,12 @@ int Repository::stergere(int cod)
     for(int i = 0; i < this->get_size(); i++)
         if(this->elems[i].get_cod() == cod)///Am gasit elementul
         {
+            vector<Booking> newelems(elems.begin(), elems.begin()+i-1);
             for(int j = i; j < this->get_size() - 1; j++)
-                this->elems[j] = this->elems[j + 1];
-            elems.pop_back();///Avem cu un element mai putin, TREBUIE sa modificam dimensiunea!
+                //this->elems[j] = this->elems[j + 1];
+                newelems.push_back(elems[j + 1]);
+            //elems.pop_back();///Avem cu un element mai putin, TREBUIE sa modificam dimensiunea!
+            elems = newelems;
             return 1;
         }
     return 0;

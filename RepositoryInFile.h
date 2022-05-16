@@ -9,12 +9,12 @@
 using namespace std;
 class RepositoryInFile:public Repository{
 private:
-    char* fisier;
+    string fisier;
     void loadFromFile();
     void storeToFile();
 public:
-    RepositoryInFile();
-    RepositoryInFile(char*);
+    ///RepositoryInFile();
+    RepositoryInFile(string);
     int adaugare(Booking &) override;
     ///Avem nevoie doar de un cod Pentru a sterge un Booking
     int stergere(int) override;

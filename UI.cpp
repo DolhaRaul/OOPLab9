@@ -3,11 +3,8 @@
 //
 
 #include "UI.h"
-UI::UI() {}
-UI::UI(Service &service)
-{
-    this->sv = service;
-}
+#include "Data.h"
+///UI::UI() {}
 UI::~UI(){}
 void UI::show_menu()
 {
@@ -15,8 +12,8 @@ void UI::show_menu()
     cout << "del.Stergere booking" << endl;
     cout << "update.Modificare booking" << endl;
     cout << "cautare_hotel.Afisam toate booking urile ce au un nume dorit" << endl;
-    cout << "cautare_hotel_oras_perioada.Afisam toate booking urile ce au hotelul in orasul dorit si are rezervare";
-    cout <<  " disponibila in perioada dorita, sau eventual in perioade sugerate la interval de +-3zile distanta" << endl;
+    cout << "cautare_hotel_oras_perioada.Afisam toate booking urile ce au hotelul in orasul dorit si are rezervare" << endl;
+    cout << "disponibila in perioada dorita, sau eventual in perioade sugerate la interval de +-3zile distanta" << endl;
     cout << "number.Afisam numarul total de booking uri" << endl;
     cout << "show_all.Booking urile curente" << endl;
     cout << "0.Iesire" << endl;
@@ -64,7 +61,7 @@ void UI::modificare()
 }
 void UI::cautare_hotele()
 {
-    char* oras = new char[30];
+    string oras;
     cout << "Introduceti orasul hotelului pentru care cautam booking uri:" << endl;
     cin >> oras;
     vector<Booking> hotele = this->sv.search_after_oras(oras);
@@ -73,20 +70,56 @@ void UI::cautare_hotele()
     else
         for(int i = 0; i < hotele.size(); i++)
             cout << "Booking ul al " << i + 1 << " lea este: " << endl << hotele.at(i);
-    delete[] oras;
 }
 void UI::cautare_hotele_oras_perioada()
 {
-    char* oras = new char[30];
+    string oras;
     cout << "Introduceti numele orasului pentru care cautam hoteluri uri:" << endl;
     cin >> oras;
     Data begin;
     Data end;
     cout << "Dati perioada de inceput a croazierei aici:" << endl;
+    begin.is_ui = true;
     cin >> begin;
+    begin.is_ui = false;
     cout << "Dati finalul perioadei de croaziera aici:" << endl;
+    end.is_ui = true;
     cin >> end;
-    this->sv.search_booking_oras_perioada(oras, begin, end);
+    end.is_ui = false;
+    vector<Booking> result = this->sv.search_booking_oras_perioada(oras, begin, end);
+    if(result.empty())
+        cout << "NU AVEM NICI HOTELURI SUGERATE NICI DORITE!" << endl;
+    else
+    {
+        if (!result.empty())///Avem hoteluri
+        {
+            cout << "Oferte:" << endl;
+            for (int i = 0; i < result.size(); i++)
+                cout << i + 1 << " " << endl << result.at(i);
+        }
+
+        int nr;
+        do {
+            cout << "Introduceti numarul ofertei:";
+            cout.flush();
+            cin >> nr;
+        }while(nr>result.size() || nr <= 0);
+        nr--;
+        if(begin == this->sv.get_elems()[nr].get_data_inc() && end == this->sv.get_elems()[nr].get_data_sf())///acopera tot intervalul
+            this->sv.modify(result[nr].get_cod(), result[nr].get_nume(),result[nr].get_oras(), result[nr].get_data_sf().bigger_with_3_days(),result[nr].get_data_sf());
+        if(end < this->sv.get_elems()[nr].get_data_sf())///nu acopera tot intervalul; intervalul ramas va fi [end, get_data_sd]
+        {
+            cout << "S-a facut 1" << endl;
+            this->sv.modify(result[nr].get_cod(), result[nr].get_nume(), result[nr].get_oras(), end,
+                            result[nr].get_data_sf());
+        }
+        if(begin > this->sv.get_elems()[nr].get_data_inc())///nu acopera tot intervalul; intervalul ramas va fi [begin, get_data_inc]
+        {
+            cout << "S-a facut 2" << endl;
+            this->sv.modify(result[nr].get_cod(), result[nr].get_nume(), result[nr].get_oras(),
+                            result[nr].get_data_inc(), begin);
+        }
+    }
 }
 void UI::run_menu()
 {

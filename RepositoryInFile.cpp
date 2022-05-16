@@ -4,15 +4,14 @@
 
 #include "RepositoryInFile.h"
 #include "Repository.h"
-RepositoryInFile::RepositoryInFile()
+//RepositoryInFile::RepositoryInFile()
+//{
+//    this->fisier = new char[10];
+//    strcpy(this->fisier, "Cazare.txt");
+//}
+RepositoryInFile::RepositoryInFile(string Fisier)
 {
-    this->fisier = new char[10];
-    strcpy(this->fisier, "Cazare.txt");
-}
-RepositoryInFile::RepositoryInFile(char *fisier)
-{
-    this->fisier = new char[strlen(fisier) + 1];
-    strcpy_s(this->fisier, strlen(fisier) + 1, fisier);
+    this->fisier = Fisier;
 }
 void RepositoryInFile::loadFromFile()
 {
@@ -61,10 +60,7 @@ RepositoryInFile& RepositoryInFile::operator=(RepositoryInFile &r)
     if(this != &r)
     {
         Repository::operator=(r);
-        if(this->fisier)
-            delete[] this->fisier;
-        this->fisier = new char[strlen(r.fisier) + 3];
-        strcpy_s(this->fisier, strlen(r.fisier) + 1, r.fisier);
+        this->fisier = r.fisier;
     }
     return *this;
 }

@@ -94,6 +94,8 @@ void Teste::teste_service_tema()
     Repository r;
     Service sv(r);
     Data s1 = {1, 1, 1};
+    Data s1_close = {4, 1, 1};
+    Data s1_after = {7, 1, 1};
     Data s2 = {2, 2, 2};
     Data s3 = {11, 1, 2012};
     Data s4 = {11, 11, 2020};
@@ -119,7 +121,8 @@ void Teste::teste_service_tema()
     assert(sv.add(1, "LaMinuta", "Bistrita", s1, s2) == 1);
     assert(sv.modify(1, "LaRaul", "Bistrita", s3, s3) == 1);///ACUM PUTEM!
 
-    Service sv_nou;
+    Repository rnou;
+    Service sv_nou(rnou);
     sv_nou = sv;
     assert(sv_nou.get_nr_elem() == sv.get_nr_elem());///MERGE ATRIBUIREA!
     vector<Booking> hotele = sv.search_after_oras("Bistrita");
@@ -128,6 +131,27 @@ void Teste::teste_service_tema()
     sv.add(33, "LaRaul", "Magulesti", s3, s3);
     hotele = sv.search_after_oras("LaRaul");
     assert(hotele.capacity() == 0);///Nu avem hoteluri cu acest nume!
+    vector<Booking> oferte;
+    oferte = sv.search_booking_oras_perioada("Municipiu", s1, s2);
+    assert(oferte.size() == 0);///NU AVEM, nici hoteluri dorite nici sugerate
+    oferte = sv.search_booking_oras_perioada("Bistrita", s1, s2);
+    assert(oferte.size() == 2);
+    assert(oferte.at(0) == b2);
+
+    Repository rnew;
+    Service s_new(rnew);
+    s_new.add(1, "1", "D", s1, s1);
+    s_new.add(2, "Minuta", "D", s1, s1_close);
+    s_new.add(3, "Dolhi", "D", s1_after, s1_close);
+    s_new.add(4, "Ioo", "D", s1_after, s2);
+    oferte = s_new.search_booking_oras_perioada("D", s1_close, s1_after);
+    assert(oferte.size() == 2);
+    assert(oferte.at(0) == Booking(4, "Ioo", "D", s1_after, s2));///Ne ducem cu 3 zile la stanga
+    oferte = s_new.search_booking_oras_perioada("D", s1, s1);
+    assert(oferte.size() == 2);///Avem Doua hoteluri DORIT(cel cu cod 1 si cod 2:[s1, s1] si [s1, s4]
+    assert(oferte.at(0) == Booking(1, "1", "D", s1, s1));
+    oferte = s_new.search_booking_oras_perioada("D", s1_close, s2);
+    assert(oferte.size() == 0);
     cout << "Metodele tema si una live pentru service sunt bune!" << endl;
 }
 
@@ -147,9 +171,9 @@ void Teste::teste_repository_file(){
     r.adaugare(b3);
     r.adaugare(b4);
     assert(r.get_size()==4);
-//    r.stergere(b2.get_cod());
-//    assert(r.get_size()==3);
-    ::remove("file.txt");
+    r.stergere(b2.get_cod());
+    assert(r.get_size()==3);
+    //::remove("file.txt");
 }
 void Teste::teste_operatori_data()
 {

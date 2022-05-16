@@ -21,8 +21,8 @@ private:
     void cautare_hotele_oras_perioada();
     void show_all();
 public:
-    UI();
-    UI(Service &);
+    ///UI();
+    UI(Service & service):sv(service){}
     void show_menu();
     void run_menu();
     ~UI();

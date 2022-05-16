@@ -80,8 +80,12 @@ ostream& operator<<(ostream& os, Booking &b)
     os << "Codul booking ului este: " << b.cod << endl;
     os << "Numele hotelui booking ului este: " << b.nume << endl;
     os << "Orasul hotelului booking ului este: " << b.oras << endl;
-    os << "Pentru data_Inceput_Disponibilitate: " << endl << b.data_inc;
+    b.data_inc.is_ui = true;
+    b.data_sf.is_ui = true;
+    os << "Pentru data_Inceput_Disponibilitate: " << endl << b.data_inc << endl;
     os << "Pentru data_Sfarsit_Disponibilitate: " << endl << b.data_sf << endl;
+    b.data_inc.is_ui = false;
+    b.data_sf.is_ui = false;
     return os;
 }
 istream& operator>>(istream &is, Booking &b)
@@ -96,9 +100,13 @@ istream& operator>>(istream &is, Booking &b)
     is >> b.oras;
     cout << endl;
     cout << "Pentru data_Inceput_Disponibilitate, avem:" << endl;
+    b.data_inc.is_ui = true;
     is >> b.data_inc;
+    b.data_inc.is_ui = false;
     cout << "Pentru data_Sfarsit_Disponibilitate, avem:" << endl;
+    b.data_sf.is_ui = true;
     is >> b.data_sf;
+    b.data_sf.is_ui = true;
     return is;
 }
 string Booking::to_string()
